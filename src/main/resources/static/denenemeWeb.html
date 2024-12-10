@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rentACar</title>
+</head>
+<body>
+
+<h1>Ürünler</h1>
+<button id="fetch-button">Listele</button>
+<ul id="product-list"></ul>
+<script>
+    // Buton ve liste elemanlarını seçiyoruz
+    const fetchButton = document.getElementById('fetch-button');
+    const productList = document.getElementById('product-list');
+
+    // Butona tıklandığında çalışacak fonksiyonu tanımlıyoruz
+    fetchButton.addEventListener('click', () => {
+        // Önceki listeyi temizliyoruz
+        productList.innerHTML = '';
+
+        // API'yi çağırıyoruz
+        fetch('http://localhost:8080/api/brands')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API isteği başarısız oldu.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Gelen ürünleri listeye ekliyoruz
+                data.forEach(product => {
+                    const li = document.createElement('li');
+                    li.textContent = product.name; // Ürün adı
+                    productList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                // Hata durumunda konsola yazdırıyoruz
+                console.error('Bir hata oluştu:', error);
+            });
+    });
+</script>
+
+</body>
+</html>
